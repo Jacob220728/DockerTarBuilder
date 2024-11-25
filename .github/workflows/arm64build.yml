@@ -6,7 +6,7 @@ on:
       docker_images:
         description: '请填写docker镜像名称 多个用英文逗号分开'
         required: true
-        default: 'arm64v8/python:3.7.5-buster'  # 设置默认的 Docker 镜像列表
+        default: 'arm64v8/python:3.7.5'  # 设置默认的 Docker 镜像列表
 
 jobs:
   pull_and_package:
@@ -22,7 +22,7 @@ jobs:
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/arm64"
-          echo 'FROM arm64v8/python:3.7.5-buster' > Dockerfile
+          echo 'FROM arm64v8/python:3.7.5' > Dockerfile
           echo 'scikit-learn==1.0.1' > requirements.txt
           echo 'six==1.16.0' >> requirements.txt
           echo 'scipy==1.7.2' >> requirements.txt
@@ -39,6 +39,7 @@ jobs:
           echo 'protobuf==3.19.1' >> requirements.txt
           echo 'pymongo==3.12.1' >> requirements.txt
           echo 'COPY requirements.txt /'
+          echo 'RUN apt install python3-pip' >>  Dockerfile
           echo 'RUN pip install -r /requirements.txt' >>  Dockerfile
           cat requirements.txt
           cat Dockerfile
