@@ -1,4 +1,4 @@
-name: ARM64 Pull and Save Docker Image
+name: ARM64 build
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/arm64"
-          cat requirments.txt
+          cat requirements.txt
           docker save "${image}" -o "${image//\//_}-arm64.tar"
         done
 
