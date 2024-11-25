@@ -22,7 +22,7 @@ jobs:
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/arm64"
-          echo 'FROM "${image}"' > Dockerfile
+          echo 'FROM arm64v8/python:3.7.5-buster' > Dockerfile
           echo 'RUN pip3 install scikit-learn==1.0.1 six==1.16.0 scipy==1.7.2 PyWavelets==1.2.0 python-dateutil==2.8.2 pyparsing==3.0.6 cycler==0.11.0 grpcio==1.41.1 grpcio-tools==1.41.1 kiwisolver==1.3.2 matplotlib==3.4.3 numpy==1.21.4 Pillow==8.4.0 protobuf==3.19.1 pymongo==3.12.1' >>  Dockerfile
           docker build -t pyarm64-alg .
           docker save pyarm64-alg -o "${image//\//_}-arm64.tar"
